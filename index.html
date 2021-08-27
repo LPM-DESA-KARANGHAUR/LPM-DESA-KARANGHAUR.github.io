@@ -139,21 +139,28 @@
         <div class="container">
             <div class="row text-center mb-3 mt-3">
                 <div class="col">
-                    <h2>DAFTAR BEDAH RUMAH</h2>
+                    <h2>SILAHKAN DAFTAR BEDAH RUMAH DI SINI</h2>
                 </div>
             </div>
             <div class="row justify-content-center">
                 <div class="col-md-6">
-                    <form>
+
+                    <div class="alert alert-success alert-dismissible fade show d-none my-alert" role="alert">
+                        <strong>Terima Kasih !</strong> Data Anda Sudah Kami Terima.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <form name="DATA-RUTILAHU">
                         <div class="mb-3">
                             <label for="name" class="form-label">NAMA LENGKAP</label>
-                            <input type="text" class="form-control" id="name" aria-describedby="name">
-                            <div id="" class="form-text">MENGGUNAKAN HURUF KAPITAL</div>
+                            <input type="text" class="form-control" id="name" aria-describedby="name" name="nama"
+                                required>
+                            <div id="" class="form-text">NAMA HARUS SESUAI DENGAN KTP</div>
                         </div>
 
                         <div class="mb-3">
                             <label for="name" class="form-label">JENIS KELAMIN</label>
-                            <select class="form-select" aria-label="Default select example">
+                            <select class="form-select" aria-label="Default select example" name="jk">
                                 <option selected>Pilih Jenis Kelamin</option>
                                 <option value="Laki - Laki">Laki - Laki</option>
                                 <option value="Perempuan">Perempuan</option>
@@ -162,28 +169,38 @@
 
                         <div class="mb-3">
                             <label for="nik" class="form-label">Nomer NIK</label>
-                            <input type="text" class="form-control" id="nik" aria-describedby="nik">
+                            <input type="text" class="form-control" id="nik" aria-describedby="nik" name="nik" required>
                         </div>
 
                         <div class="mb-3">
                             <label for="name" class="form-label">ALAMAT LENGKAP</label>
-                            <select class="form-select mb-3" aria-label="Default select example">
+                            <select class="form-select mb-3" aria-label="Default select example" name="alamat">
                                 <option selected>Pilih Alamat</option>
                                 <option value="Kp. Teluk Haur RT.001 RW.001">Kp. Teluk Haur RT.001 RW.001</option>
+                                <option value="Kp. Teluk Haur RT.002 RW.001">Kp. Teluk Haur RT.002 RW.001</option>
+                                <option value="Kp. Teluk Haur RT.003 RW.001">Kp. Teluk Haur RT.003 RW.001</option>
                                 <option value="Kp. Teluk Haur RT.001 RW.002">Kp. Teluk Haur RT.001 RW.002</option>
+                                <option value="Kp. Teluk Haur RT.002 RW.002">Kp. Teluk Haur RT.002 RW.002</option>
+                                <option value="Kp. Teluk Haur RT.001 RW.003">Kp. Teluk Haur RT.001 RW.003</option>
+                                <option value="Kp. Teluk Haur RT.002 RW.003">Kp. Teluk Haur RT.002 RW.003</option>
                             </select>
                         </div>
 
                         <div class="mb-3">
                             <label for="name" class="form-label">PEKERJAAN</label>
-                            <select class="form-select mb-3" aria-label="Default select example">
-                                <option selected>Pekerjaan</option>
+                            <select class="form-select mb-3" aria-label="Default select example" name="pekerjaan">
+                                <option selected>Pilih Pekerjaan</option>
                                 <option value="Buruh Harian Lepas">Buruh Harian Lepas</option>
                                 <option value="Mengurus Rumah Tangga">Mengurus Rumah Tangga</option>
                             </select>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Kirim</button>
+                        <button type="submit" class="btn btn-primary btn-kirim">Kirim</button>
+
+                        <button class="btn btn-primary btn-loading d-none" type="button" disabled>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Loading...
+                        </button>
                     </form>
                 </div>
             </div>
@@ -217,6 +234,30 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous"></script>
     -->
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwiJ2XkjBTDl3UTFhKJXF5mQ0Fs56QiRq0OHSivAbglB5MdFvsM7i0VUo4J4fy4Qt38/exec'
+        const form = document.forms['DATA-RUTILAHU'];
+        const btnKirim = document.querySelector('.btn-kirim');
+        const btnLoading = document.querySelector('.btn-loading');
+        const myAlert = document.querySelector('.my-alert');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault()
+            //Ketika tombol submit ditekan
+            btnLoading.classList.toggle('d-none');
+            btnKirim.classList.toggle('d-none');
+            fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+                .then(response => {
+                    btnLoading.classList.toggle('d-none');
+                    btnKirim.classList.toggle('d-none');
+                    myAlert.classList.toggle('d-none');
+                    form.reset();
+                    console.log('Success!', response)
+                })
+                .catch(error => console.error('Error!', error.message))
+        })
+    </script>
+
 </body>
 
 </html>
